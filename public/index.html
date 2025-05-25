@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My In-App Proxy</title>
+  <style>
+    body { margin: 0; font-family: sans-serif; }
+    #toolbar { padding: 0.5rem; background: #f4f4f4; display: flex; gap: 0.5rem; }
+    #urlInput { flex: 1; padding: 0.5rem; }
+    #frame { width: 100vw; height: calc(100vh - 3rem); border: none; }
+  </style>
+</head>
+<body>
+  <div id="toolbar">
+    <input id="urlInput" type="text" placeholder="Enter URL to proxy" value="https://" />
+    <button id="go">Go</button>
+  </div>
+  <iframe id="frame"></iframe>
+
+  <script>
+    // Register the UV service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/uv.sw.js')
+        .then(() => console.log('UV SW registered'))
+        .catch(e => console.error('UV SW failed:', e));
+    } else {
+      alert('Service workers not supported.');
+    }
+
+    const iframe = document.getElementById('frame');
+    document.getElementById('go').onclick = () => {
+      const url = document.getElementById('urlInput').value;
+      iframe.src = `/uv/${encodeURIComponent(url)}`;
+    };
+  </script>
+</body>
+</html>
