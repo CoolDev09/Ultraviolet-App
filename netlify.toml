@@ -2,46 +2,37 @@
 # Build & Publish Settings
 # ───────────────────────────────────────────────────────────────
 [build]
-  # Directory where your serverless functions live
+  # Only install dependencies (no `build` script in package.json)
+  command   = "npm install"
+  # Where your serverless functions live
   functions = "functions"
-  # Directory to publish (your host page + UV assets)
+  # Where your host page + UV assets live
   publish   = "public"
-  # Install command (if you’re using any build step; adjust as needed)
-  command   = "npm install && npm run build"
 
+# ───────────────────────────────────────────────────────────────
 # Netlify Dev (local testing)
+# ───────────────────────────────────────────────────────────────
 [dev]
-  # Run your functions and serve your static site
   functions = "functions"
   publish   = "public"
-  # If you have a local bundler/watch step:
-  # command   = "npm run dev"
+  # If you ever add a local bundler/watch step, you can override:
+  # command = "npm run dev"
 
 # ───────────────────────────────────────────────────────────────
 # Redirect all URLs to index.html (SPA / service-worker host)
 # ───────────────────────────────────────────────────────────────
 [[redirects]]
-  from     = "/*"
-  to       = "/index.html"
-  status   = 200
-  force    = true
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+  force  = true
 
 # ───────────────────────────────────────────────────────────────
 # Custom Headers
 # ───────────────────────────────────────────────────────────────
-#
-# 1) Allow embedding this site in iframes anywhere
-#    - X-Frame-Options: ALLOWALL  (explicit override)
-#    - Content-Security-Policy: frame-ancestors *
-#
-# 2) (Optional) You can add other headers here, like caching or CORS.
 [[headers]]
   for = "/*"
   [headers.values]
-    # Allow any page to embed this site in an <iframe>
-    X-Frame-Options            = "ALLOWALL"
-    Content-Security-Policy    = "frame-ancestors *;"
-
-    # ––– Additional headers you might want –––
-    # Access-Control-Allow-Origin = "*"      # if you plan to fetch resources cross-origin  
-    # Cache-Control               = "max-age=0, must-revalidate"
+    # Allow embedding this entire site in any <iframe>
+    X-Frame-Options         = "ALLOWALL"
+    Content-Security-Policy = "frame-ancestors *;"
