@@ -2,24 +2,22 @@
 # Build & Publish Settings
 # ───────────────────────────────────────────────────────────────
 [build]
-  # Only install dependencies (no `build` script in package.json)
+  # Only install dependencies
   command   = "npm install"
   # Where your serverless functions live
   functions = "functions"
-  # Where your host page + UV assets live
-  publish   = "public"
+  # Publish from the root (where index.html now lives)
+  publish   = "."
 
 # ───────────────────────────────────────────────────────────────
 # Netlify Dev (local testing)
 # ───────────────────────────────────────────────────────────────
 [dev]
   functions = "functions"
-  publish   = "public"
-  # If you ever add a local bundler/watch step, you can override:
-  # command = "npm run dev"
+  publish   = "."
 
 # ───────────────────────────────────────────────────────────────
-# Redirect all URLs to index.html (SPA / service-worker host)
+# Redirect all URLs to index.html (SPA / SW fallback)
 # ───────────────────────────────────────────────────────────────
 [[redirects]]
   from   = "/*"
@@ -28,11 +26,10 @@
   force  = true
 
 # ───────────────────────────────────────────────────────────────
-# Custom Headers
+# Custom Headers: allow embedding in any iframe
 # ───────────────────────────────────────────────────────────────
 [[headers]]
   for = "/*"
   [headers.values]
-    # Allow embedding this entire site in any <iframe>
     X-Frame-Options         = "ALLOWALL"
     Content-Security-Policy = "frame-ancestors *;"
